@@ -1,7 +1,8 @@
-## LLHARP Workflow for creating reference spectra
+## Workflow for creating reference spectra for event reports
 #
-# Script to process clicks manually selected in Pamguard into a reference 
-# spectrum that can be used for assessing clicks to species level (ideally!)
+# Script to process groups of clicks that have been manually selected in 
+# Pamguard into a reference spectrum that can be used for assessing clicks 
+# within an event summary report
 #
 # Process Overview
 # 1
@@ -31,10 +32,11 @@ library(RSQLite)
 
 # ------ USER DEFINED INPUTS ----------------------------------------------
 
-tripStr = 'LL061'
-recStr = 'FR45_DL84'
-# Pamguard version
-pgVer = '20207b'
+# tripStr = 'LL061'
+# recStr = 'FR45_DL84'
+# # Pamguard version
+# pgVer = '20207b'
+
 
 
 # define transfer function
@@ -43,20 +45,17 @@ pgVer = '20207b'
 calFile = '//picqueenfish/psd2/crp/LLHARP/calibration/transfer_functions/RevN_PAMpal_invSensit.csv'
 
 # define paths
-# path_analysis should point to the folder above the 'pamguard' folder (that 
-#               contains the 'databases' and 'binaries' subdirectories), must
-#               contain a 'manualPicks' folder of event .csvs, a 'banterModels' 
-#               folder with models for prediction, and an 'eventData folder
-#               for outputs
-path_analysis = '//piccrp4nas/psuedorcanassidens/analysis_phase3/'
-# path_crptools = paste0(dirname(here()), '/crptools/') # assuming llamp and crptools are both in the users github directory
-path_save = 'C:/Users/Selene.Fregosi/Documents/GitHub/llamp/files/reference_spectra'
+path_database <- ''
+path_binaries <- ''
+# specify path to save to
+path_save <- 'C:/Users/Selene.Fregosi/Documents/GitHub/Kogia_DASBR'
+
 
 # below objects are built from the above user defined inputs
-path_pg = paste0(path_analysis, 'pamguard')
-
-pgVerPrfx = paste0('pam', pgVer)
-trStr = paste0(tripStr, '_', recStr)
+# path_pg = paste0(path_analysis, 'pamguard')
+# 
+# pgVerPrfx = paste0('pam', pgVer)
+# trStr = paste0(tripStr, '_', recStr)
 
 
 # ------ PAMpal steps -----------------------------------------------------
