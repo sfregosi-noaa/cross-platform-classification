@@ -27,33 +27,37 @@ library(RSQLite)
 # ------ USER DEFINED INPUTS ----------------------------------------------
 
 # calFile = '//picqueenfish/psd2/crp/LLHARP/calibration/transfer_functions/RevN_PAMpal_invSensit.csv'
-sampleRate <- 384000
+sampleRate <- 288000 #576000 or 288000 for MACS2018  #384000 for HICEAS 2023
 
 # define paths
-path_database <- '//piccrpnas/CRP2/McCullough/KOGIA_DASBR_POST/2023_HICEAS/Database'
-databaseFile <- file.path(path_database, 'HICEAS_2023_DS12a_Kogia_PAM20210a.sqlite3')
-path_binaries <- '//piccrpnas/CRP2/McCullough/KOGIA_DASBR_POST/2023_HICEAS/Binaries/DS12a'
+# path_database <- '//piccrpnas/CRP2/McCullough/KOGIA_DASBR_POST/2023_HICEAS/Database'
+# databaseFile <- file.path(path_database, 'HICEAS_2023_DS12a_Kogia_PAM20210a.sqlite3')
+# path_binaries <- '//piccrpnas/CRP2/McCullough/KOGIA_DASBR_POST/2023_HICEAS/Binaries/DS12a'
+
+path_database <- '//piccrpnas/CRP/MACS_2018_DASBR/Post_Processing/MACS_DASBR_PostProcessing_JLK/Databases'
+databaseFile <- file.path(path_database, 'DS3_ST-3_PAM20014c.sqlite3')
+path_binaries <- '//piccrpnas/CRP/MACS_2018_DASBR/Post_Processing/MACS_DASBR_PostProcessing_JLK/Binaries/DS3_ST-3'
 
 # specify path to save to
-path_save <- 'C:/Users/Selene.Fregosi/Documents/GitHub/Kogia_DASBR/refSpec'
+path_save <- 'C:/Users/Selene.Fregosi/Documents/GitHub/SpermWhale_DASBR/refSpec'
 # specify some output filenames
-paramFile <- file.path(path_save, 'Kogia_refSpec_HICEAS2023_DS12a_params.rda')
-detFile <- file.path(path_save, 'Kogia_refSpec_HICEAS2023_DS12a_dets.rda')
-clickFile <- file.path(path_save, 'Kogia_refSpec_HICEAS2023_DS12a_eventClicks.rda')
-refSpecFile <- file.path(path_save, 'Kogia_refSpec_HICEAS2023_DS12a.csv')
+paramFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3_params.rda')
+detFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3_dets.rda')
+clickFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3_eventClicks.rda')
+refSpecFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3.csv')
 
 
 # ------ PAMpal steps -----------------------------------------------------
 
 #Create a settings object (loading databases and binaries) 
 #below example filter setting is for Kogia data
-pps <- PAMpalSettings(db = database_file, binaries = path_binaries, 
-                      sr_hz = 'auto', winLen_sec = 0.0025, 
-                      filterfrom_khz = 80, filterto_khz = NULL)
-# typical settings for other odonts are:
-# pps <- PAMpalSettings(db = database_file, binaries = path_binaries, 
+# pps <- PAMpalSettings(db = databaseFile, binaries = path_binaries, 
 #                       sr_hz = 'auto', winLen_sec = 0.0025, 
-#                       filterfrom_khz = 2, filterto_khz = NULL)
+#                       filterfrom_khz = 80, filterto_khz = NULL)
+# typical settings for other odonts are:
+pps <- PAMpalSettings(db = databaseFile, binaries = path_binaries,
+                      sr_hz = 'auto', winLen_sec = 0.0025,
+                      filterfrom_khz = 2, filterto_khz = NULL)
 # save it because it can take a while
 saveRDS(pps, file = paramFile)
 
