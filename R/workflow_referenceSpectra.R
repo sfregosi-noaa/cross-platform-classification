@@ -39,12 +39,12 @@ databaseFile <- file.path(path_database, 'DS3_ST-3_PAM20014c.sqlite3')
 path_binaries <- '//piccrpnas/CRP/MACS_2018_DASBR/Post_Processing/MACS_DASBR_PostProcessing_JLK/Binaries/DS3_ST-3'
 
 # specify path to save to
-path_save <- 'C:/Users/Selene.Fregosi/Documents/GitHub/SpermWhale_DASBR/refSpec'
+path_save <- '//piccrpnas/crp4/fregosi/github/SpermWhale_DASBR/refSpec'
 # specify some output filenames
 paramFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3_params.rda')
 detFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3_dets.rda')
-clickFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3_eventClicks.rda')
-refSpecFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3.csv')
+clickFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3_event18_eventClicks.rda')
+refSpecFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3_event18.csv')
 
 
 # ------ PAMpal steps -----------------------------------------------------
@@ -62,7 +62,7 @@ pps <- PAMpalSettings(db = databaseFile, binaries = path_binaries,
 saveRDS(pps, file = paramFile)
 
 # create the acoustic study based on the single event
-dets <- processPgDetections(pps, mode = 'db', id = 'Id-1', 
+dets <- processPgDetections(pps, mode = 'db', id = 'ID-18', 
                             progress = TRUE)
 saveRDS(dets, file = detFile)
 
@@ -84,7 +84,7 @@ dbDisconnect(conn)
 # clicks can be duplicated if they are classified more than once so remove them
 eventClicks <- eventClicks[!duplicated(eventClicks$UID),]
 
-avSpec <- calculateAverageSpectra(dets, evNum = 1, wl = 256, channel = 1, 
+avSpec <- calculateAverageSpectra(dets, evNum = 18, wl = 256, channel = 1, 
                                       sr = sampleRate, norm = FALSE, plot = TRUE, 
                                       noise = FALSE)
 
@@ -114,7 +114,7 @@ for (f in 1:ncol(avSpec$allSpec)){
         col = rgb(red = 0.8, green = 0.8, blue = 0.8, alpha = 0.2))
 }
 
-lines(avSpec$freq/1000, dBAvg_20log, col = 'orange', lwd = 2) # CORRECT
+lines(avSpec$freq/1000, dBAvg, col = 'orange', lwd = 2) # CORRECT
 # lines(Spec_LL061$freq/1000, Spec_LL061$avgSpec-normAdj_10log, col = 'black', lty = 2)
 lines(avSpec$freq/1000, avSpec$avgSpec, col = 'black', lty = 2) # from PAMpal
 legend('bottomleft', legend = c('individual clicks', '20*log10', 'PAMpal output'), 
