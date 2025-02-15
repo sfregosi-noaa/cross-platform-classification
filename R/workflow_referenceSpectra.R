@@ -1,21 +1,19 @@
-## Workflow for creating reference spectra for event reports
-#
-# Script to process groups of clicks that have been manually selected in 
-# Pamguard into a reference spectrum that can be used for assessing clicks 
-# within an event summary report
-#
-# Process Overview
-# 1
+#' Workflow for creating reference spectra for event reports
+#'
+#' Script to process groups of clicks that have been manually selected in 
+#' Pamguard into a reference spectrum that can be used for assessing clicks 
+#' within an event summary report
+#'
 
 # ------ install/update necessary packages --------------------------------
 
-# make sure you have Rtools installed
+#make sure you have Rtools installed
 # if(!require('devtools')) install.packages('devtools')
 
-# install latest ver from github (won't do anything if up to date!)
+#install latest ver from github (won't do anything if up to date!)
 # devtools::install_github('taikisan21/PAMpal')
 
-# # Installation of CRAN versions - only have to run once
+#installation of CRAN versions - only have to run once
 # install.packages('PAMpal')
 
 library(here)
@@ -29,7 +27,7 @@ library(RSQLite)
 # calFile = '//picqueenfish/psd2/crp/LLHARP/calibration/transfer_functions/RevN_PAMpal_invSensit.csv'
 sampleRate <- 288000 #576000 or 288000 for MACS2018  #384000 for HICEAS 2023
 
-# define paths
+#define paths
 # path_database <- '//piccrpnas/CRP2/McCullough/KOGIA_DASBR_POST/2023_HICEAS/Database'
 # databaseFile <- file.path(path_database, 'HICEAS_2023_DS12a_Kogia_PAM20210a.sqlite3')
 # path_binaries <- '//piccrpnas/CRP2/McCullough/KOGIA_DASBR_POST/2023_HICEAS/Binaries/DS12a'
@@ -38,13 +36,14 @@ path_database <- '//piccrpnas/CRP/MACS_2018_DASBR/Post_Processing/MACS_DASBR_Pos
 databaseFile <- file.path(path_database, 'DS3_ST-3_PAM20014c.sqlite3')
 path_binaries <- '//piccrpnas/CRP/MACS_2018_DASBR/Post_Processing/MACS_DASBR_PostProcessing_JLK/Binaries/DS3_ST-3'
 
-# specify path to save to
+#specify path to save to
 path_save <- '//piccrpnas/crp4/fregosi/github/SpermWhale_DASBR/refSpec'
-# specify some output filenames
+#specify some output filenames
 paramFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3_params.rda')
 detFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3_dets.rda')
-clickFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3_event18_eventClicks.rda')
-refSpecFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3_event18.csv')
+# detFile <- file.path('//piccrpnas/crp2/McCullough/Pm_AcousticStudies/MACS_2018/MACS_2018_DS3_ch1.rdata')
+clickFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3_event180712093005_eventClicks.rda')
+refSpecFile <- file.path(path_save, 'Pm_refSpec_MACS2018_DS3_event180712093005.csv')
 
 
 # ------ PAMpal steps -----------------------------------------------------
@@ -66,9 +65,11 @@ dets <- processPgDetections(pps, mode = 'db', id = 'ID-18',
                             progress = TRUE)
 saveRDS(dets, file = detFile)
 
+#ALTERNATIVE load existing AcousticStudy
+# dets <- readRDS(detFile)
 
 # set species
-dets <- setSpecies(dets, method='pamguard')
+# dets <- setSpecies(dets, method='pamguard')
 # dets = setSpecies(dets, method = 'manual', value = 'Pc')
 # # filter out only our species of interest
 # dets <- filter(dets, species %in% c('Pc'))
@@ -84,7 +85,7 @@ dbDisconnect(conn)
 # clicks can be duplicated if they are classified more than once so remove them
 eventClicks <- eventClicks[!duplicated(eventClicks$UID),]
 
-avSpec <- calculateAverageSpectra(dets, evNum = 18, wl = 256, channel = 1, 
+avSpec <- calculateAverageSpectra(dets, evNum = '1208520735.180712093005.wav', wl = 256, channel = 1, 
                                       sr = sampleRate, norm = FALSE, plot = TRUE, 
                                       noise = FALSE)
 
@@ -116,7 +117,7 @@ for (f in 1:ncol(avSpec$allSpec)){
 
 lines(avSpec$freq/1000, dBAvg, col = 'orange', lwd = 2) # CORRECT
 # lines(Spec_LL061$freq/1000, Spec_LL061$avgSpec-normAdj_10log, col = 'black', lty = 2)
-lines(avSpec$freq/1000, avSpec$avgSpec, col = 'black', lty = 2) # from PAMpal
+lines(avSpec$freq/1000, avSpec$avgSpec, col = 'black', lwd = 1, lty = 2) # from PAMpal
 legend('bottomleft', legend = c('individual clicks', '20*log10', 'PAMpal output'), 
        col = c('grey', 'orange', 'black'), lty = c(1, 1, 2), 
        lwd = c(0.5, 2, 1))
@@ -124,7 +125,7 @@ legend('bottomleft', legend = c('individual clicks', '20*log10', 'PAMpal output'
 
 # ------ Final clean up and save to CSV -----------------------------------
 
-# coerce into a cleaner data frame and save
+#coerce into a cleaner data frame and save
 refSpec <- data.frame(dB = dBAvg, frq = avSpec$freq/1000) 
 write.csv(refSpec, file = refSpecFile, row.names = FALSE)
 
