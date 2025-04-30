@@ -1,14 +1,17 @@
 # Cross-platform BANTER classification of false killer whale acoustic events
- 
+
 ## Purpose
+
 Working repository for 'Considerations when applying classification models across recording platforms: A case study with Hawaiian false killer whales' to be presented at DCLDE 2024 - Rotterdam, The Netherlands
 
 ## Links
-[Cross-plaform BANTER Classification](https://drive.google.com/drive/u/0/folders/1AWEu-Z4wjEYvwvZVuYcyZXDN4tl2QFaP) (Google Drive Folder for large data files)  
-[Team notes](https://docs.google.com/document/d/1iQLqO2aHOUdpuAUZKB0HAanaTyXcnns8tLfGeC-rzr4/edit)  
-[ClassyPc repository](https://github.com/ybarkley/ClassyPc) (Related work by Y. Barkley)  
+
+[Cross-plaform BANTER Classification](https://drive.google.com/drive/u/0/folders/1AWEu-Z4wjEYvwvZVuYcyZXDN4tl2QFaP) (Google Drive Folder for large data files)
+[Team notes](https://docs.google.com/document/d/1iQLqO2aHOUdpuAUZKB0HAanaTyXcnns8tLfGeC-rzr4/edit)
+[ClassyPc repository](https://github.com/ybarkley/ClassyPc) (Related work by Y. Barkley)
 
 ## DCLDE Abstract
+
 **Considerations when applying classification models across recording platforms: A case study with Hawaiian false killer whales**
 
 *Selene Fregosi, Jenny Trickey, Megan Wood, Yvonne Barkley, Jennifer McCullough, Anne Simonis, Erin Oleson*
